@@ -1,29 +1,42 @@
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList} from 'react-native';
 import { ListItem, Avatar } from 'react-native-elements';
+import {DISHES} from "../shared/dishes"
 
+class Menu extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            dishes: DISHES,
+        }
 
-class Menu extends Component{
-    render(){
-        return <FlatList data = {this.props.dishes}
-            renderItem = {({item, index})=> this.renderMenuItem(item, index)}
-            keyExtractor = {item => item.id.toString()}
-        />
+    }
+    render() {
+        return (
+            <FlatList data={this.state.dishes}
+                renderItem={({ item, index }) => this.renderMenuItem(item, index)}
+                keyExtractor={item => item.id.toString()}
+            />
+        );
     }
 
 
     renderMenuItem(item, index) {
-        return ( <ListItem key={index}>
-            <Avatar source = {require('./images/uthappizza.png')}/>
-            <ListItem.Content>
-                <ListItem.Title>
-                    {item.name}
-                </ListItem.Title>
-                <ListItem.Subtitle>
-                    {item.description}
-                </ListItem.Subtitle>
-            </ListItem.Content>
-        </ListItem>
+        const {navigate} = this.props.navigation;
+        //print(item.image);
+        //alert(item.image)
+        return (
+            <ListItem key={index} onPress={() => navigate("Dishdetail", {dishId: item.id}) }>
+                <Avatar source={require('./images/uthappizza.png')}/>
+                <ListItem.Content>
+                    <ListItem.Title>
+                        {item.name}
+                    </ListItem.Title>
+                    <ListItem.Subtitle>
+                        {item.description}
+                    </ListItem.Subtitle>
+                </ListItem.Content>
+            </ListItem>
         );
     }
 }
