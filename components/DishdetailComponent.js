@@ -28,7 +28,9 @@ class Dishdetail extends Component {
     }
   render() {
       const dishId = parseInt(this.props.route.params.dishId);
-    return (<RenderDish dish={this.state.dishes[dishId]} />);
+    return (
+    <RenderDish dish={this.state.dishes[dishId]} 
+    />);
   }
 }
 export default Dishdetail;
