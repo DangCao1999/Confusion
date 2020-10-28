@@ -1,30 +1,47 @@
 import React, { Component } from 'react';
-import { ScrollView, Text } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { Card, Image } from 'react-native-elements';
+import Loading from './LoadingComponent';
+// import { DISHES } from '../shared/dishes';
+// import { PROMOTIONS } from '../shared/promotions';
+// import { LEADERS } from '../shared/leaders';
+import { baseUrl } from '../shared/baseUrl';
+import { connect } from 'react-redux';
 
-import { DISHES } from '../shared/dishes';
-import { PROMOTIONS } from '../shared/promotions';
-import { LEADERS } from '../shared/leaders';
-
+const mapStateToProps = state => {
+    return {
+        leaders: state.leadersReducer,
+        promotions: state.promotionsReducer,
+        dishes: state.dishesReducer
+    }
+}
 class Home extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            dishes: DISHES,
-            promotions: PROMOTIONS,
-            leaders: LEADERS
-        }
-    }
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         dishes: DISHES,
+    //         promotions: PROMOTIONS,
+    //         leaders: LEADERS
+    //     }
+    // }
     render() {
-        const dish = this.state.dishes.filter((dish) => dish.featured === true)[0];
-        const promo = this.state.promotions.filter((promo) => promo.featured === true)[0];
-        const leader = this.state.leaders.filter((leader) => leader.featured === true)[0];
+        const dish = this.props.dishes.dishes.filter((dish) => dish.featured === true)[0];
+        const promo = this.props.promotions.promotions.filter((promo) => promo.featured === true)[0];
+        const leader = this.props.leaders.leaders.filter((leader) => leader.featured === true)[0];
         return (
             <ScrollView>
-                <RenderItem item={dish} />
-                <RenderItem item={promo} />
-                <RenderItem item={leader} />
+                <RenderItem item={dish}
+                    isLoading={this.props.dishes.isLoading}
+                    errMess={this.props.dishes.errMess} />
+                <RenderItem item={promo}
+                    isLoading={this.props.promotions.isLoading}
+                    errMess={this.props.promotions.errMess}
+                />
+                <RenderItem item={leader}
+                    isLoading={this.props.leaders.isLoading}
+                    errMess={this.props.leaders.errMess}
+                />
             </ScrollView>
         );
     }
@@ -32,12 +49,18 @@ class Home extends Component {
 
 class RenderItem extends Component {
     render() {
-        const item = this.props.item;
-        if (item != null) {
-            if (item.designation != null) {
+
+        if (this.props.isLoading) {
+            return ( 
+                <Loading />);
+        } else if (this.props.errMess) {
+            return (<Text>{this.props.errMess}</Text>)
+        } else {
+            const item = this.props.item;
+            if (item != null) {
                 return (
                     <Card>
-                        <Image source={require("./images/uthappizza.png")} style={{ width: '100%', height: 100, flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <Image source={{ uri: baseUrl + item.image }} style={{ width: '100%', height: 100, flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
                             <Card.FeaturedTitle>
                                 {item.name}
                             </Card.FeaturedTitle>
@@ -50,21 +73,9 @@ class RenderItem extends Component {
                 );
             }
             else {
-                return (
-                    <Card>
-                        <Image source={require("./images/uthappizza.png")} style={{ width: '100%', height: 100, flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
-                            <Card.FeaturedTitle>
-                                {item.name}
-                            </Card.FeaturedTitle>
-                        </Image>
-                        <Text style={{ margin: 10 }}>{item.description}</Text>
-                    </Card>
-                );
+                return (<View />);
             }
-        }
-        else {
-            <View />
         }
     }
 }
-export default Home;
+export default connect(mapStateToProps)(Home);

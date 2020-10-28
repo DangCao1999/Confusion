@@ -2,9 +2,17 @@ import React, { Component } from 'react';
 import { View, Text, FlatList, YellowBox } from 'react-native';
 import { Card, Icon, Image,  } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
-import { COMMENTS } from '../shared/comments';
-import { DISHES } from "../shared/dishes";
+import {connect} from "react-redux";
+import { baseUrl } from '../shared/baseUrl';
+// import { COMMENTS } from '../shared/comments';
+// import { DISHES } from "../shared/dishes";
 
+const mapStateToProps = state => {
+  return {
+    dishes: state.dishesReducer,
+    comments: state.commentsReducer
+  }
+}
 class RenderComment extends Component {
   render() {
     const comments = this.props.comments;
@@ -35,7 +43,7 @@ class RenderDish extends Component {
     if (dish != null) {
       return (
         <Card>
-          <Image source={require('./images/uthappizza.png')} style={{ width: '100%', height: 100, flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Image source={{ uri: baseUrl + dish.image }} style={{ width: '100%', height: 100, flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Card.FeaturedTitle>{dish.name}</Card.FeaturedTitle>
           </Image>
           <Text style={{ margin: 10 }}>{dish.description}</Text>
@@ -57,8 +65,8 @@ class Dishdetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dishes: DISHES,
-      comments: COMMENTS,
+      // dishes: DISHES,
+      // comments: COMMENTS,
       favorites: []
     };
   }
@@ -66,9 +74,9 @@ class Dishdetail extends Component {
     const dishId = parseInt(this.props.route.params.dishId);
     return (
       <ScrollView>
-        <RenderDish dish={this.state.dishes[dishId]} favorite={this.state.favorites.some(el=>el===dishId)}
+        <RenderDish dish={this.props.dishes.dishes[dishId]} favorite={this.state.favorites.some(el=>el===dishId)}
           onPress={()=> this.markFavorite(dishId)}/>
-        <RenderComment comments={this.state.comments.filter((comment)=> comment.dishId === dishId)}></RenderComment>
+        <RenderComment comments={this.props.comments.comments.filter((comment)=> comment.dishId === dishId)}></RenderComment>
       </ScrollView>
     );
   }
@@ -78,4 +86,4 @@ class Dishdetail extends Component {
     this.setState({favorites: this.state.favorites.concat(dishId)});
   }
 }
-export default Dishdetail;
+export default connect(mapStateToProps)(Dishdetail);

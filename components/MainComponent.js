@@ -1,14 +1,19 @@
 import { connect } from 'react-redux';
-import { fetchLeaders } from '../redux/ActionCreators';
+import { fetchLeaders, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
 
-const mapStateToProps = state => {
-  return {
-    leaders: state.leaders
-  }
-};
+// const mapStateToProps = state => {
+//   return {
+//     leaders: state.leaders,
+//     comments: state.comments,
+//     dishes: state.dishes
+//   }
+// };
 
 const mapDispatchToProps = dispatch => ({
-  fetchLeaders: () => dispatch(fetchLeaders())
+  fetchLeaders: () => dispatch(fetchLeaders()),
+  fetchComments: ()=> dispatch(fetchComments()),
+  fetchDishes: () => dispatch(fetchDishes()),
+  fetchPromos: () => dispatch(fetchPromos()),
 });
 
 import React, { Component } from 'react';
@@ -24,6 +29,7 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerI
 
 import Dishdetail from './DishdetailComponent';
 import { Icon , Image} from 'react-native-elements';
+import { baseUrl } from '../shared/baseUrl';
 
 
 function CustomDrawerContent(props) {
@@ -31,7 +37,7 @@ function CustomDrawerContent(props) {
     <DrawerContentScrollView {...props}>
       <View style={{ backgroundColor: '#7cc', height: 80, alignItems: 'center', flexDirection: 'row' }}>
         <View style={{ flex: 1 }}>
-          <Image source={require('./images/logo.png')} style={{ margin: 10, width: 80, height: 60 }} />
+          <Image source={{uri: baseUrl+"images/logo.png"}} style={{ margin: 10, width: 80, height: 60 }} />
         </View>
         <View style={{ flex: 2 }}>
           <Text style={{ color: '#fff', fontSize: 22, fontWeight: 'bold' }}>Cao's Restaurant</Text>
@@ -160,6 +166,9 @@ class Main extends Component {
   componentDidMount() {
     // redux
     this.props.fetchLeaders();
+    this.props.fetchDishes();
+    this.props.fetchComments();
+    this.props.fetchPromos();
   }
   render() {
     return (
@@ -169,6 +178,6 @@ class Main extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+// export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(null, mapDispatchToProps)(Main);
 
