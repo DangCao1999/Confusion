@@ -12,5 +12,4 @@ export const dishesReducer = (state = { isLoading: true, errMess: null, dishes: 
     default:
       return state;
   }
-  
 };

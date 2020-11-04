@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { fetchLeaders, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
-
+import Reservation from './ReservationComponent';
 // const mapStateToProps = state => {
 //   return {
 //     leaders: state.leaders,
@@ -11,7 +11,7 @@ import { fetchLeaders, fetchDishes, fetchComments, fetchPromos } from '../redux/
 
 const mapDispatchToProps = dispatch => ({
   fetchLeaders: () => dispatch(fetchLeaders()),
-  fetchComments: ()=> dispatch(fetchComments()),
+  fetchComments: () => dispatch(fetchComments()),
   fetchDishes: () => dispatch(fetchDishes()),
   fetchPromos: () => dispatch(fetchPromos()),
 });
@@ -28,7 +28,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 
 import Dishdetail from './DishdetailComponent';
-import { Icon , Image} from 'react-native-elements';
+import { Icon, Image } from 'react-native-elements';
 import { baseUrl } from '../shared/baseUrl';
 
 
@@ -37,7 +37,7 @@ function CustomDrawerContent(props) {
     <DrawerContentScrollView {...props}>
       <View style={{ backgroundColor: '#7cc', height: 80, alignItems: 'center', flexDirection: 'row' }}>
         <View style={{ flex: 1 }}>
-          <Image source={{uri: baseUrl+"images/logo.png"}} style={{ margin: 10, width: 80, height: 60 }} />
+          <Image source={{ uri: baseUrl + "images/logo.png" }} style={{ margin: 10, width: 80, height: 60 }} />
         </View>
         <View style={{ flex: 2 }}>
           <Text style={{ color: '#fff', fontSize: 22, fontWeight: 'bold' }}>Cao's Restaurant</Text>
@@ -54,21 +54,26 @@ function CustomDrawerContent(props) {
 const MainNavigator = createDrawerNavigator();
 function MainNavigatorScreen() {
   return (
-    <MainNavigator.Navigator initialRouteName="Home" 
-    drawerContent={props => <CustomDrawerContent {...props}/>}
+    <MainNavigator.Navigator initialRouteName="Home"
+      drawerContent={props => <CustomDrawerContent {...props} />}
     >
       <MainNavigator.Screen name="Home" component={HomeNavigatorScreen}
-       options={{title: "Home", drawerIcon: ({ focused, size }) => (<Icon name='home' size={size} color={focused ? '#7cc' : '#ccc'} />)}}>
-       </MainNavigator.Screen>
-       <MainNavigator.Screen name="About Us"  component={AboutNavigatorScreen}
-        options={{title:"About Us", drawerIcon: ({focused, size}) => (<Icon name="info" size={size} color={focused ? '#7cc': '#ccc'}/>)}}
-       ></MainNavigator.Screen>
-      <MainNavigator.Screen name="Menu" component={MenuNavigatorScreen}
-      options={{title:"Menu", drawerIcon: ({focused, size}) => (<Icon name="menu" size={size} color={focused ? '#7cc': '#ccc'}/>)}}
-      ></MainNavigator.Screen> 
-      <MainNavigator.Screen name="Contact Us" component={ContactUsNavigatorScreen}
-       options={{title:"Contact Us", drawerIcon: ({focused, size}) => (<Icon name="contacts" size={size} color={focused ? '#7cc': '#ccc'}/>)}}
+        options={{ title: "Home", drawerIcon: ({ focused, size }) => (<Icon name='home' size={size} color={focused ? '#7cc' : '#ccc'} />) }}>
+      </MainNavigator.Screen>
+      <MainNavigator.Screen name="About Us" component={AboutNavigatorScreen}
+        options={{ title: "About Us", drawerIcon: ({ focused, size }) => (<Icon name="info" size={size} color={focused ? '#7cc' : '#ccc'} />) }}
       ></MainNavigator.Screen>
+      <MainNavigator.Screen name="Menu" component={MenuNavigatorScreen}
+        options={{ title: "Menu", drawerIcon: ({ focused, size }) => (<Icon name="menu" size={size} color={focused ? '#7cc' : '#ccc'} />) }}
+      ></MainNavigator.Screen>
+      <MainNavigator.Screen name="Contact Us" component={ContactUsNavigatorScreen}
+        options={{ title: "Contact Us", drawerIcon: ({ focused, size }) => (<Icon name="contacts" size={size} color={focused ? '#7cc' : '#ccc'} />) }}
+      ></MainNavigator.Screen>
+      <MainNavigator.Screen name='Reservation' component={ReservationNavigatorScreen}
+        options={{
+          title: 'Reserve Table',
+          drawerIcon: ({ focused, size }) => (<Icon name='cutlery' type='font-awesome' size={size} color={focused ? '#7cc' : '#ccc'} />)
+        }} />
     </MainNavigator.Navigator>
   );
 }
@@ -85,11 +90,11 @@ function HomeNavigatorScreen() {
         headerTitleStyle: { color: '#fff' }
       }}>
       <HomeNavigator.Screen name='Home' component={Home}
-      options={({navigation})=>({
-        headerLeftContainerStyle: {marginLeft: 10},
-        headerTitle: 'Home',
-        headerLeft: ()=> (<Icon name='menu' size={36} color='#fff' onPress={()=> navigation.toggleDrawer()}/>)
-      })}
+        options={({ navigation }) => ({
+          headerLeftContainerStyle: { marginLeft: 10 },
+          headerTitle: 'Home',
+          headerLeft: () => (<Icon name='menu' size={36} color='#fff' onPress={() => navigation.toggleDrawer()} />)
+        })}
       />
     </HomeNavigator.Navigator>
   );
@@ -106,12 +111,12 @@ function MenuNavigatorScreen() {
         headerTintColor: '#fff',
         headerTitleStyle: { color: '#fff' }
       }}>
-      <MenuNavigator.Screen name='Menu' component={Menu} 
-      options={({navigation})=>({
-        headerLeftContainerStyle: {marginLeft: 10},
-        headerTitle: 'Menu',
-        headerLeft: ()=> (<Icon name='menu' size={36} color='#fff' onPress={()=> navigation.toggleDrawer()}/>)
-      })}
+      <MenuNavigator.Screen name='Menu' component={Menu}
+        options={({ navigation }) => ({
+          headerLeftContainerStyle: { marginLeft: 10 },
+          headerTitle: 'Menu',
+          headerLeft: () => (<Icon name='menu' size={36} color='#fff' onPress={() => navigation.toggleDrawer()} />)
+        })}
       />
       <MenuNavigator.Screen name='Dishdetail' component={Dishdetail} options={{ headerTitle: 'Dish Detail' }} />
     </MenuNavigator.Navigator>
@@ -128,12 +133,12 @@ function AboutNavigatorScreen() {
         headerTintColor: '#fff',
         headerTitleStyle: { color: '#fff' }
       }}>
-      <AboutNavigator.Screen name='About Us' component={About} 
-      options={({navigation})=>({
-        headerLeftContainerStyle: {marginLeft: 10},
-        headerTitle: 'About',
-        headerLeft: ()=> (<Icon name='menu' size={36} color='#fff' onPress={()=> navigation.toggleDrawer()}/>)
-      })}
+      <AboutNavigator.Screen name='About Us' component={About}
+        options={({ navigation }) => ({
+          headerLeftContainerStyle: { marginLeft: 10 },
+          headerTitle: 'About',
+          headerLeft: () => (<Icon name='menu' size={36} color='#fff' onPress={() => navigation.toggleDrawer()} />)
+        })}
       />
 
     </AboutNavigator.Navigator>
@@ -151,14 +156,32 @@ function ContactUsNavigatorScreen() {
         headerTintColor: '#fff',
         headerTitleStyle: { color: '#fff' }
       }}>
-      <ContactUsNavigator.Screen name='Contact Us' component={Contact} 
-      options={({navigation})=>({
-        headerTitle: 'Contact',
-        headerLeft: ()=> (<Icon name='menu' size={36} color='#fff' onPress={()=> navigation.toggleDrawer()}/>)
-      })}
+      <ContactUsNavigator.Screen name='Contact Us' component={Contact}
+        options={({ navigation }) => ({
+          headerTitle: 'Contact',
+          headerLeft: () => (<Icon name='menu' size={36} color='#fff' onPress={() => navigation.toggleDrawer()} />)
+        })}
       />
 
     </ContactUsNavigator.Navigator>
+  );
+}
+
+const ReservationNavigator = createStackNavigator();
+function ReservationNavigatorScreen() {
+  return (
+    <ReservationNavigator.Navigator initialRouteName='Reservation'
+      screenOptions={{
+        headerStyle: { backgroundColor: '#7cc' },
+        headerTintColor: '#fff',
+        headerTitleStyle: { color: '#fff' }
+      }}>
+      <ReservationNavigator.Screen name='Reservation' component={Reservation}
+        options={({ navigation }) => ({
+          headerTitle: 'Reserve Table',
+          headerLeft: () => (<Icon name='menu' size={36} color='#fff' onPress={() => navigation.toggleDrawer()} />)
+        })} />
+    </ReservationNavigator.Navigator>
   );
 }
 
